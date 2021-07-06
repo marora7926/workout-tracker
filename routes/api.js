@@ -31,14 +31,13 @@ router.put("/api/workouts/:id", (req, res) => {
   
   //route to find all workouts
   router.get("/api/workouts", (req, res) => {
-    // Workout.aggregate([
-    //   {
-    //     $addFields: {
-    //       totalDuration: { $sum: "$exercises.duration"},
-    //     },
-    //   },
-    // ])
-    Workout.find({})
+    Workout.aggregate([
+      {
+        $addFields: {
+          totalDuration: { $sum: "$exercises.duration"},
+        },
+      },
+    ])
       .then(dbWorkout => {
         res.json(dbWorkout);
       })
@@ -46,7 +45,6 @@ router.put("/api/workouts/:id", (req, res) => {
         res.status(400).json(err);
       });
   });
-
   
   //route to find the stats
   router.get("/api/workouts/range", (req, res) => {
